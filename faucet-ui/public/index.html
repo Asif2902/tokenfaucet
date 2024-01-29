@@ -111,24 +111,10 @@ async function connectToMetaMask() {
   try {
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
-      // Add custom network for Katla
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: '0x28c60', // 167008 in hexadecimal
-          chainName: 'Katla',
-          rpcUrls: ['https://rpc.katla.taiko.xyz'],
-          nativeCurrency: {
-            name: 'Ether',
-            symbol: 'ETH',
-            decimals: 18,
-          },
-          blockExplorerUrls: ['https://explorer.katla.taiko.xyz/'],
-        }],
-      });
-      
-      console.log('Connected to MetaMask on Katla network!');
-      // You can now interact with the Katla network using window.ethereum
+      // Request account access if needed
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('Connected to MetaMask!');
+      // You can now interact with the Ethereum network using window.ethereum
     } else {
       console.log('MetaMask is not installed.');
       // You can redirect users to download MetaMask or display a message asking them to install it
