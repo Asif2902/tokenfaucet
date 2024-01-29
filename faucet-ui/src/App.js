@@ -166,13 +166,5 @@ function App() {
   );
 }
 
-// Get the COINFILP button element
-const coinflipButton = document.getElementById('coinflip-button');
-
-// Add event listener to the button
-coinflipButton.addEventListener('click', () => {
-    // Forward the user to the specified link
-    window.location.href = 'https://test.everypunks.xyz/';
-});
 
 export default App;
