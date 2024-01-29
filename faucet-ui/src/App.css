@@ -62,7 +62,3 @@ body {
 .withdraw-success {
   color: green;
 }
-
-.withdraw-error {
-    overflow: hidden;
-    text-overflow: ellipsis;
