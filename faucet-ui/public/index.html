@@ -42,7 +42,7 @@
     -->
   </body>
 </html>
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -111,24 +111,23 @@ async function connectToMetaMask() {
   try {
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
-      // Connect to the Katla network
+      // Add custom network for Katla
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: '16008',
-            chainName: 'Katla',
-            rpcUrls: ['https://rpc.katla.taiko.xyz'],
-            nativeCurrency: {
+        params: [{
+          chainId: '0x28c60', // 167008 in hexadecimal
+          chainName: 'Katla',
+          rpcUrls: ['https://rpc.katla.taiko.xyz'],
+          nativeCurrency: {
             name: 'Ether',
             symbol: 'ETH',
             decimals: 18,
           },
-            blockExplorerUrls: ['https://explorer.katla.taiko.xyz/']
-          }
-        ]
+          blockExplorerUrls: ['https://explorer.katla.taiko.xyz/'],
+        }],
       });
-      console.log('Connected to MetaMask and added Katla network!');
+      
+      console.log('Connected to MetaMask on Katla network!');
       // You can now interact with the Katla network using window.ethereum
     } else {
       console.log('MetaMask is not installed.');
