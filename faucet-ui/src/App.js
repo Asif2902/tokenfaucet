@@ -119,7 +119,8 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. 500 AT/12h.</p>
+            <p>Fast and reliable. 500 AT/12h.
+                  Coinfilp link : test.everypunks.xyz</p>
             <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
