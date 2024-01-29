@@ -41,3 +41,54 @@
     -->
   </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect to MetaMask</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .connect-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<button class="connect-button" onclick="connectToMetaMask()">Connect to MetaMask</button>
+
+<script>
+async function connectToMetaMask() {
+  try {
+    // Check if MetaMask is installed
+    if (typeof window.ethereum !== 'undefined') {
+      // Request account access if needed
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('Connected to MetaMask!');
+      // You can now interact with the Ethereum network using window.ethereum
+    } else {
+      console.log('MetaMask is not installed.');
+      // You can redirect users to download MetaMask or display a message asking them to install it
+    }
+  } catch (error) {
+    console.error('Error connecting to MetaMask:', error);
+    // Handle error connecting to MetaMask
+  }
+}
+</script>
+
+</body>
+</html>
