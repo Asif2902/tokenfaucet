@@ -94,7 +94,7 @@ function App() {
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
-            <h1 className="navbar-item is-size-4">Asif Token (OCT)</h1>
+            <h1 className="navbar-item is-size-4">Asif Token (AT)</h1>
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end is-align-items-center">
@@ -165,5 +165,14 @@ function App() {
     </div>
   );
 }
+
+// Get the COINFILP button element
+const coinflipButton = document.getElementById('coinflip-button');
+
+// Add event listener to the button
+coinflipButton.addEventListener('click', () => {
+    // Forward the user to the specified link
+    window.location.href = 'https://test.everypunks.xyz/';
+});
 
 export default App;
