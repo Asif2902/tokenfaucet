@@ -120,7 +120,7 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 AT/12h</p>
-                  <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
+            <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
             <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
@@ -153,9 +153,17 @@ function App() {
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
                   <p>
-                    {transactionData
-                      ? `Transaction hash: ${transactionData}`
-                      : "--"}
+                    {transactionData ? (
+                      <a
+                        href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Transaction hash: {transactionData}
+                      </a>
+                    ) : (
+                      "--"
+                    )}
                   </p>
                 </div>
               </article>
@@ -166,6 +174,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
