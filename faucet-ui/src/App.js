@@ -9,70 +9,93 @@ function App() {
   const [fcContract, setFcContract] = useState();
   const [withdrawError, setWithdrawError] = useState("");
   const [withdrawSuccess, setWithdrawSuccess] = useState("");
-  const [transactionData, setTransactionData] = useState("");
+  const [transactionData, setTransactionData] = useState(
+    localStorage.getItem("transactionData") || ""
+  );
+  const [isConnected, setIsConnected] = useState(false);
+  const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
   useEffect(() => {
     getCurrentWalletConnected();
     addWalletListener();
   }, [walletAddress]);
 
+  useEffect(() => {
+    localStorage.setItem("transactionData", transactionData);
+  }, [transactionData]);
+
   const connectWallet = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
-        /* get provider */
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: "0x28c60",
+              chainName: "Katla",
+              nativeCurrency: {
+                name: "Ethereum",
+                symbol: "ETH",
+                decimals: 18,
+              },
+              rpcUrls: ["https://rpc.katla.taiko.xyz"],
+              blockExplorerUrls: ["https://explorer.katla.taiko.xyz/"],
+            },
+          ],
+        });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        /* get accounts */
         const accounts = await provider.send("eth_requestAccounts", []);
-        /* get signer */
         setSigner(provider.getSigner());
-        /* local contract instance */
         setFcContract(faucetContract(provider));
-        /* set active wallet address */
         setWalletAddress(accounts[0]);
-      } catch (err) {
-        console.error(err.message);
+        setIsConnected(true);
+      } catch (error) {
+        console.error(error);
+        setIsConnected(false);
       }
     } else {
-      /* MetaMask is not installed */
-      console.log("Please install MetaMask");
+      console.log("MetaMask is not installed");
     }
   };
 
   const getCurrentWalletConnected = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
-        /* get provider */
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        /* get accounts */
-        const accounts = await provider.send("eth_accounts", []);
-        if (accounts.length > 0) {
-          /* get signer */
-          setSigner(provider.getSigner());
-          /* local contract instance */
-          setFcContract(faucetContract(provider));
-          /* set active wallet address */
-          setWalletAddress(accounts[0]);
+        const chainId = await provider.send("eth_chainId");
+        if (chainId === "0x28c60") {
+          setIsCorrectNetwork(true);
+          const accounts = await provider.send("eth_accounts", []);
+          if (accounts.length > 0) {
+            setSigner(provider.getSigner());
+            setFcContract(faucetContract(provider));
+            setWalletAddress(accounts[0]);
+            setIsConnected(true);
+          }
         } else {
-          console.log("Connect to MetaMask using the Connect Wallet button");
+          setIsCorrectNetwork(false);
         }
-      } catch (err) {
-        console.error(err.message);
+      } catch (error) {
+        console.error(error);
+        setIsConnected(false);
       }
     } else {
-      /* MetaMask is not installed */
-      console.log("Please install MetaMask");
+      console.log("MetaMask is not installed");
     }
   };
 
   const addWalletListener = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       window.ethereum.on("accountsChanged", (accounts) => {
         setWalletAddress(accounts[0]);
       });
+      window.ethereum.on("chainChanged", () => {
+        window.location.reload();
+      });
     } else {
-      /* MetaMask is not installed */
       setWalletAddress("");
-      console.log("Please install MetaMask");
+      setIsConnected(false);
+      console.log("MetaMask is not installed");
     }
   };
 
@@ -101,9 +124,10 @@ function App() {
               <button
                 className="button is-white connect-wallet"
                 onClick={connectWallet}
+                disabled={!isCorrectNetwork}
               >
                 <span className="is-link has-text-weight-bold">
-                  {walletAddress && walletAddress.length > 0
+                  {isConnected
                     ? `Connected: ${walletAddress.substring(
                         0,
                         6
@@ -137,13 +161,14 @@ function App() {
                     type="text"
                     placeholder="Enter your wallet address (0x...)"
                     defaultValue={walletAddress}
+                    disabled={!isConnected}
                   />
                 </div>
                 <div className="column">
                   <button
                     className="button is-link is-medium"
                     onClick={getOCTHandler}
-                    disabled={walletAddress ? false : true}
+                    disabled={!isConnected || !isCorrectNetwork}
                   >
                     GET TOKENS
                   </button>
