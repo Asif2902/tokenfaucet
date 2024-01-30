@@ -9,12 +9,19 @@ function App() {
   const [fcContract, setFcContract] = useState();
   const [withdrawError, setWithdrawError] = useState("");
   const [withdrawSuccess, setWithdrawSuccess] = useState("");
-  const [transactionData, setTransactionData] = useState("");
+  const [transactionData, setTransactionData] = useState(
+    localStorage.getItem("transactionData") || ""
+  );
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     getCurrentWalletConnected();
     addWalletListener();
   }, [walletAddress]);
+
+  useEffect(() => {
+    localStorage.setItem("transactionData", transactionData);
+  }, [transactionData]);
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -29,6 +36,7 @@ function App() {
         setFcContract(faucetContract(provider));
         /* set active wallet address */
         setWalletAddress(accounts[0]);
+        setIsConnected(true);
       } catch (err) {
         console.error(err.message);
       }
@@ -36,6 +44,13 @@ function App() {
       /* MetaMask is not installed */
       console.log("Please install MetaMask");
     }
+  };
+
+  const disconnectWallet = async () => {
+    setWalletAddress("");
+    setIsConnected(false);
+    setSigner(null);
+    setFcContract(null);
   };
 
   const getCurrentWalletConnected = async () => {
@@ -52,6 +67,7 @@ function App() {
           setFcContract(faucetContract(provider));
           /* set active wallet address */
           setWalletAddress(accounts[0]);
+          setIsConnected(true);
         } else {
           console.log("Connect to MetaMask using the Connect Wallet button");
         }
@@ -68,10 +84,12 @@ function App() {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       window.ethereum.on("accountsChanged", (accounts) => {
         setWalletAddress(accounts[0]);
+        setIsConnected(accounts.length > 0);
       });
     } else {
       /* MetaMask is not installed */
       setWalletAddress("");
+      setIsConnected(false);
       console.log("Please install MetaMask");
     }
   };
@@ -100,14 +118,11 @@ function App() {
             <div className="navbar-end is-align-items-center">
               <button
                 className="button is-white connect-wallet"
-                onClick={connectWallet}
+                onClick={isConnected ? disconnectWallet : connectWallet}
               >
                 <span className="is-link has-text-weight-bold">
-                  {walletAddress && walletAddress.length > 0
-                    ? `Connected: ${walletAddress.substring(
-                        0,
-                        6
-                      )}...${walletAddress.substring(38)}`
+                  {isConnected
+                    ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} (Click to Disconnect)`
                     : "Connect Wallet"}
                 </span>
               </button>
@@ -120,7 +135,7 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 AT/12h</p>
-                  <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
+            <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
             <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
@@ -153,9 +168,17 @@ function App() {
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
                   <p>
-                    {transactionData
-                      ? `Transaction hash: ${transactionData}`
-                      : "--"}
+                    {transactionData ? (
+                      <a
+                        href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Transaction hash: {transactionData}
+                      </a>
+                    ) : (
+                      "--"
+                    )}
                   </p>
                 </div>
               </article>
@@ -166,6 +189,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
