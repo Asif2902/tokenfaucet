@@ -69,3 +69,10 @@ body {
 .panel-block p {
     word-break: break-all;
 }
+.popup-overlay {
+    display: none !important;
+}
+
+div#navbarMenu {
+    display: block !important;
+}
