@@ -14,6 +14,7 @@ function App() {
   );
   const [isConnected, setIsConnected] = useState(false);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
+  const [isSwitchingChain, setIsSwitchingChain] = useState(false);
 
   useEffect(() => {
     getCurrentWalletConnected();
@@ -27,28 +28,36 @@ function App() {
   const connectWallet = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x28c60",
-              chainName: "Katla",
-              nativeCurrency: {
-                name: "Ethereum",
-                symbol: "ETH",
-                decimals: 18,
+        if (isSwitchingChain) {
+          setIsSwitchingChain(false);
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x28c60" }],
+          });
+        } else {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x28c60",
+                chainName: "Katla",
+                nativeCurrency: {
+                  name: "Ethereum",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                rpcUrls: ["https://rpc.katla.taiko.xyz"],
+                blockExplorerUrls: ["https://explorer.katla.taiko.xyz/"],
               },
-              rpcUrls: ["https://rpc.katla.taiko.xyz"],
-              blockExplorerUrls: ["https://explorer.katla.taiko.xyz/"],
-            },
-          ],
-        });
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const accounts = await provider.send("eth_requestAccounts", []);
-        setSigner(provider.getSigner());
-        setFcContract(faucetContract(provider));
-        setWalletAddress(accounts[0]);
-        setIsConnected(true);
+            ],
+          });
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          setSigner(provider.getSigner());
+          setFcContract(faucetContract(provider));
+          setWalletAddress(accounts[0]);
+          setIsConnected(true);
+        }
       } catch (error) {
         console.error(error);
         setIsConnected(false);
@@ -112,6 +121,11 @@ function App() {
     }
   };
 
+  const handleSwitchChain = () => {
+    setIsSwitchingChain(true);
+    connectWallet();
+  };
+
   return (
     <div>
       <nav className="navbar">
@@ -124,7 +138,7 @@ function App() {
               <button
                 className="button is-white connect-wallet"
                 onClick={connectWallet}
-                disabled={!isCorrectNetwork}
+                disabled={!isCorrectNetwork || isSwitchingChain}
               >
                 <span className="is-link has-text-weight-bold">
                   {isConnected
@@ -132,6 +146,8 @@ function App() {
                         0,
                         6
                       )}...${walletAddress.substring(38)}`
+                    : isSwitchingChain
+                    ? "Switching Chain..."
                     : "Connect Wallet"}
                 </span>
               </button>
