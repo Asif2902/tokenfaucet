@@ -56,7 +56,8 @@ body {
 }
 
 .withdraw-error {
-  color: red;
+    color: #bbb !important;
+    padding: 0 4%;
 }
 
 .withdraw-success {
