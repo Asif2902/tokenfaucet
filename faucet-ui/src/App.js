@@ -74,6 +74,10 @@ function App() {
           }
         } else {
           setIsCorrectNetwork(false);
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x28c60" }],
+          });
         }
       } catch (error) {
         console.error(error);
@@ -124,7 +128,6 @@ function App() {
               <button
                 className="button is-white connect-wallet"
                 onClick={connectWallet}
-                disabled={!isCorrectNetwork}
               >
                 <span className="is-link has-text-weight-bold">
                   {isConnected
