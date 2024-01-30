@@ -62,3 +62,10 @@ body {
 .withdraw-success {
   color: green;
 }
+.withdraw-error {
+    word-break: break-all;
+}
+
+.panel-block p {
+    word-break: break-all;
+}
