@@ -10,7 +10,7 @@ function App() {
   const [withdrawError, setWithdrawError] = useState("");
   const [withdrawSuccess, setWithdrawSuccess] = useState("");
   const [transactionData, setTransactionData] = useState(
-    localStorage.getItem("transactionData") || ""
+    JSON.parse(localStorage.getItem("transactionData")) || []
   );
   const [showAllTransactions, setShowAllTransactions] = useState(false);
 
@@ -20,11 +20,11 @@ function App() {
   }, [walletAddress]);
 
   useEffect(() => {
-    localStorage.setItem("transactionData", transactionData);
+    localStorage.setItem("transactionData", JSON.stringify(transactionData));
   }, [transactionData]);
 
   const connectWallet = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
         /* get provider */
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -46,7 +46,7 @@ function App() {
   };
 
   const getCurrentWalletConnected = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
         /* get provider */
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -72,7 +72,7 @@ function App() {
   };
 
   const addWalletListener = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       window.ethereum.on("accountsChanged", (accounts) => {
         setWalletAddress(accounts[0]);
       });
@@ -90,14 +90,18 @@ function App() {
       const fcContractWithSigner = fcContract.connect(signer);
       const resp = await fcContractWithSigner.requestTokens();
       setWithdrawSuccess("Operation succeeded - enjoy your tokens!");
-      setTransactionData(resp.hash);
+      setTransactionData([...transactionData, resp.hash]);
     } catch (err) {
       setWithdrawError(err.message);
     }
   };
 
-  const handleViewAllTransactions = () => {
-    setShowAllTransactions(true);
+  const handleToggleTransactions = () => {
+    setShowAllTransactions(!showAllTransactions);
+  };
+
+  const handleClearTransactions = () => {
+    setTransactionData([]);
   };
 
   return (
@@ -163,44 +167,39 @@ function App() {
               <article className="panel is-grey-darker">
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
-                  <p>
-                    {showAllTransactions ? (
-                      <>
-                        <a
-                          href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Transaction hash: {transactionData}
-                        </a>
-                        <br />
-                        {/* Additional transactions can be shown here */}
-                      </>
-                    ) : (
-                      <span>
-                        {transactionData ? (
-                          <>
+                  {transactionData.length > 0 && (
+                    <>
+                      {transactionData.map((tx, index) => (
+                        <p key={index}>
+                          {showAllTransactions || index === transactionData.length - 1 ? (
                             <a
-                              href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                              href={`https://explorer.katla.taiko.xyz/tx/${tx}`}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              Transaction hash: {transactionData}
+                              Transaction hash: {tx}
                             </a>
-                            <br />
-                            <button
-                              className="button is-small is-link"
-                              onClick={handleViewAllTransactions}
-                            >
-                              View All
-                            </button>
-                          </>
-                        ) : (
-                          "--"
-                        )}
-                      </span>
-                    )}
-                  </p>
+                          ) : (
+                            "Transaction hash: " + tx
+                          )}
+                        </p>
+                      ))}
+                      <br />
+                      <button
+                        className="button is-small is-link"
+                        onClick={handleToggleTransactions}
+                      >
+                        {showAllTransactions ? "Hide" : "View All"}
+                      </button>
+                      <button
+                        className="button is-small is-danger"
+                        onClick={handleClearTransactions}
+                      >
+                        Clear
+                      </button>
+                    </>
+                  )}
+                  {!transactionData.length && <p>No transactions yet.</p>}
                 </div>
               </article>
             </div>
