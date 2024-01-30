@@ -12,7 +12,7 @@ function App() {
   const [transactionData, setTransactionData] = useState(
     localStorage.getItem("transactionData") || ""
   );
-  const [isConnected, setIsConnected] = useState(false);
+  const [showAllTransactions, setShowAllTransactions] = useState(false);
 
   useEffect(() => {
     getCurrentWalletConnected();
@@ -36,7 +36,6 @@ function App() {
         setFcContract(faucetContract(provider));
         /* set active wallet address */
         setWalletAddress(accounts[0]);
-        setIsConnected(true);
       } catch (err) {
         console.error(err.message);
       }
@@ -44,13 +43,6 @@ function App() {
       /* MetaMask is not installed */
       console.log("Please install MetaMask");
     }
-  };
-
-  const disconnectWallet = async () => {
-    setWalletAddress("");
-    setIsConnected(false);
-    setSigner(null);
-    setFcContract(null);
   };
 
   const getCurrentWalletConnected = async () => {
@@ -67,7 +59,6 @@ function App() {
           setFcContract(faucetContract(provider));
           /* set active wallet address */
           setWalletAddress(accounts[0]);
-          setIsConnected(true);
         } else {
           console.log("Connect to MetaMask using the Connect Wallet button");
         }
@@ -84,12 +75,10 @@ function App() {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       window.ethereum.on("accountsChanged", (accounts) => {
         setWalletAddress(accounts[0]);
-        setIsConnected(accounts.length > 0);
       });
     } else {
       /* MetaMask is not installed */
       setWalletAddress("");
-      setIsConnected(false);
       console.log("Please install MetaMask");
     }
   };
@@ -107,6 +96,10 @@ function App() {
     }
   };
 
+  const handleViewAllTransactions = () => {
+    setShowAllTransactions(true);
+  };
+
   return (
     <div>
       <nav className="navbar">
@@ -118,11 +111,14 @@ function App() {
             <div className="navbar-end is-align-items-center">
               <button
                 className="button is-white connect-wallet"
-                onClick={isConnected ? disconnectWallet : connectWallet}
+                onClick={connectWallet}
               >
                 <span className="is-link has-text-weight-bold">
-                  {isConnected
-                    ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} (Click to Disconnect)`
+                  {walletAddress && walletAddress.length > 0
+                    ? `Connected: ${walletAddress.substring(
+                        0,
+                        6
+                      )}...${walletAddress.substring(38)}`
                     : "Connect Wallet"}
                 </span>
               </button>
@@ -168,16 +164,41 @@ function App() {
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
                   <p>
-                    {transactionData ? (
-                      <a
-                        href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Transaction hash: {transactionData}
-                      </a>
+                    {showAllTransactions ? (
+                      <>
+                        <a
+                          href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Transaction hash: {transactionData}
+                        </a>
+                        <br />
+                        {/* Additional transactions can be shown here */}
+                      </>
                     ) : (
-                      "--"
+                      <span>
+                        {transactionData ? (
+                          <>
+                            <a
+                              href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Transaction hash: {transactionData}
+                            </a>
+                            <br />
+                            <button
+                              className="button is-small is-link"
+                              onClick={handleViewAllTransactions}
+                            >
+                              View All
+                            </button>
+                          </>
+                        ) : (
+                          "--"
+                        )}
+                      </span>
                     )}
                   </p>
                 </div>
