@@ -147,9 +147,8 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 AT/12h</p>
-            <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
-            <a href="https://everypunks.xyz">Dapp info</a>
-        
+            <a href="https://test.everypunks.xyz"><b>Coinfilp Dapp!</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Dapp Info</b></a>
+
                   <div className="mt-5">
                
               {withdrawError && (
