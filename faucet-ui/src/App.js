@@ -148,7 +148,10 @@ function App() {
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 AT/12h</p>
             <a href="https://test.everypunks.xyz">COINFILP DAPP!</a>
-            <div className="mt-5">
+            <a href="https://everypunks.xyz">Dapp info</a>
+        
+                  <div className="mt-5">
+               
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
               )}
