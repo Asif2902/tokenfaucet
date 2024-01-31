@@ -180,7 +180,7 @@ function App() {
                 </div>
               </div>
               <article className="panel is-grey-darker">
-                <p className="panel-heading">Transaction Data</p>
+                <p className="panel-heading">Last Transaction Data</p>
                 <div className="panel-block">
                   <p>
                     {transactionData ? (
