@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
@@ -15,7 +14,6 @@ function App() {
   );
   const [isConnected, setIsConnected] = useState(false);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
-  const [faucetBalance, setFaucetBalance] = useState(0); // State to hold faucet balance
 
   useEffect(() => {
     getCurrentWalletConnected();
@@ -25,22 +23,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("transactionData", transactionData);
   }, [transactionData]);
-
-  useEffect(() => {
-    // Fetch and set the faucet balance when the component mounts
-    fetchFaucetBalance();
-  }, []);
-
-  const fetchFaucetBalance = async () => {
-    if (fcContract) {
-      try {
-        const balance = await fcContract.balanceOf("0x1614af867704a42c6E6E82878Bfc89F911EB1bb3");
-        setFaucetBalance(balance.toString());
-      } catch (error) {
-        console.error("Error fetching faucet balance:", error);
-      }
-    }
-  };
 
   const connectWallet = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -164,8 +146,8 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. Faucet Balance: {faucetBalance}</p> {/* Display faucet balance here */}
-            <a href="https://test.everypunks.xyz"><b>Coinfilp Dapp!</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Dapp Info</b></a>
+            <p>Fast and reliable. 500 AT/12h</p>
+            <a href="https://test.everypunks.xyz"><b>Taiko Filp </b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
 
                   <div className="mt-5">
                
