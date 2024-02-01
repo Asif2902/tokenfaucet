@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
@@ -32,8 +33,12 @@ function App() {
 
   const fetchFaucetBalance = async () => {
     if (fcContract) {
-      const balance = await fcContract.balanceOf("0xDE7A59B62f2aF88EaD08eF0B090455DF041bfac0");
-      setFaucetBalance(balance.toString());
+      try {
+        const balance = await fcContract.balanceOf("0x1614af867704a42c6E6E82878Bfc89F911EB1bb3");
+        setFaucetBalance(balance.toString());
+      } catch (error) {
+        console.error("Error fetching faucet balance:", error);
+      }
     }
   };
 
