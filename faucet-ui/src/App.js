@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
+import "./App.css";
 import { ethers } from "ethers";
 import faucetContract from "./ethereum/faucet";
 
@@ -8,7 +10,9 @@ function App() {
   const [fcContract, setFcContract] = useState();
   const [withdrawError, setWithdrawError] = useState("");
   const [withdrawSuccess, setWithdrawSuccess] = useState("");
-  const [transactionData, setTransactionData] = useState(localStorage.getItem("transactionData") || "");
+  const [transactionData, setTransactionData] = useState(
+    localStorage.getItem("transactionData") || ""
+  );
   const [isConnected, setIsConnected] = useState(false);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
@@ -115,63 +119,92 @@ function App() {
 
   return (
     <div>
-      <nav style={{ backgroundColor: "#4CAF50", padding: "20px 0" }}>
-        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 style={{ color: "white", margin: 0 }}>Asif Token (AT)</h1>
-            <button
-              style={{ backgroundColor: "white", color: "#4CAF50", border: "none", padding: "10px 20px", cursor: "pointer" }}
-              onClick={connectWallet}
-            >
-              <span style={{ fontWeight: "bold" }}>
-                {isConnected ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)}` : "Connect Wallet"}
-              </span>
-            </button>
+      <nav className="navbar">
+        <div className="container">
+          <div className="navbar-brand">
+            <h1 className="navbar-item is-size-4">Asif Token (AT)</h1>
+          </div>
+          <div id="navbarMenu" className="navbar-menu">
+            <div className="navbar-end is-align-items-center">
+              <button
+                className="button is-white connect-wallet"
+                onClick={connectWallet}
+              >
+                <span className="is-link has-text-weight-bold">
+                  {isConnected
+                    ? `Connected: ${walletAddress.substring(
+                        0,
+                        6
+                      )}...${walletAddress.substring(38)}`
+                    : "Connect Wallet"}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </nav>
-      <section style={{ backgroundColor: "#f5f5f5", minHeight: "calc(100vh - 80px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center" }}>
-            <h1 style={{ fontSize: "2.5rem", marginBottom: "10px" }}>Faucet</h1>
-            <p style={{ fontSize: "1.25rem", marginBottom: "30px" }}>Fast and reliable. 500 AT/12h</p>
-          </div>
-          <div style={{ marginBottom: "30px", textAlign: "center" }}>
-            <a href="https://test.everypunks.xyz" style={{ marginRight: "10px", color: "#007bff", textDecoration: "none" }}><b>Taiko Filp</b></a>
-            <a href="https://everypunks.xyz" style={{ color: "#007bff", textDecoration: "none" }}><b>Homepage</b></a>
-          </div>
-          <div style={{ marginBottom: "30px", textAlign: "center" }}>
-            {withdrawError && <div style={{ color: "red" }}>{withdrawError}</div>}
-            {withdrawSuccess && <div style={{ color: "green" }}>{withdrawSuccess}</div>}
-          </div>
-          <div style={{ marginBottom: "30px" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <input
-                style={{ width: "70%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                type="text"
-                placeholder="Enter your wallet address (0x...)"
-                defaultValue={walletAddress}
-                disabled={!isConnected}
-              />
-              <button
-                style={{ marginLeft: "10px", backgroundColor: "#007bff", color: "white", border: "none", padding: "10px 20px", borderRadius: "5px", cursor: "pointer" }}
-                onClick={getOCTHandler}
-                disabled={!isConnected || !isCorrectNetwork}
-              >
-                GET TOKENS
-              </button>
+      <section className="hero is-fullheight">
+        <div className="faucet-hero-body">
+          <div className="container has-text-centered main-content">
+            <h1 className="title is-1">Faucet</h1>
+            <p>Fast and reliable. 500 AT/12h</p>
+
+           
+
+
+        
+                  
+            <a href="https://test.everypunks.xyz"><b>Taiko Filp </b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
+
+                  <div className="mt-5">
+               
+              {withdrawError && (
+                <div className="withdraw-error">{withdrawError}</div>
+              )}
+              {withdrawSuccess && (
+                <div className="withdraw-success">{withdrawSuccess}</div>
+              )}{" "}
             </div>
-            <article style={{ marginTop: "20px", border: "1px solid #ccc", borderRadius: "5px", padding: "10px" }}>
-              <p style={{ marginBottom: "0" }}>
-                {transactionData ? (
-                  <a href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`} target="_blank" rel="noopener noreferrer">
-                    Transaction hash: {transactionData}
-                  </a>
-                ) : (
-                  "--"
-                )}
-              </p>
-            </article>
+            <div className="box address-box">
+              <div className="columns">
+                <div className="column is-four-fifths">
+                  <input
+                    className="input is-medium"
+                    type="text"
+                    placeholder="Enter your wallet address (0x...)"
+                    defaultValue={walletAddress}
+                    disabled={!isConnected}
+                  />
+                </div>
+                <div className="column">
+                  <button
+                    className="button is-link is-medium"
+                    onClick={getOCTHandler}
+                    disabled={!isConnected || !isCorrectNetwork}
+                  >
+                    GET TOKENS
+                  </button>
+                </div>
+              </div>
+              <article className="panel is-grey-darker">
+                <p className="panel-heading">Last Transaction Data</p>
+                <div className="panel-block">
+                  <p>
+                    {transactionData ? (
+                      <a
+                        href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Transaction hash: {transactionData}
+                      </a>
+                    ) : (
+                      "--"
+                    )}
+                  </p>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -180,4 +213,3 @@ function App() {
 }
 
 export default App;
-
