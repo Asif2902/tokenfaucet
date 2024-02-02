@@ -211,5 +211,38 @@ function App() {
     </div>
   );
 }
+let addTokenToMetamask = async () => {
+  if (window.ethereum) {
+    try {
+      let result = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: "0xDE7A59B62f2aF88EaD08eF0B090455DF041bfac0",
+            symbol: "AT",
+            decimals: 18
+          }
+        }
+      });
+      console.log(result); // Logging the result for debugging purposes
+    } catch (error) {
+      console.error("Error adding token to MetaMask:", error);
+    }
+  } else {
+    console.error("MetaMask extension not detected.");
+  }
+};
+
+// Create a button element
+let addButton = document.createElement("button");
+addButton.textContent = "Add Token to MetaMask";
+
+// Add an event listener to call addTokenToMetamask when the button is clicked
+addButton.addEventListener("click", addTokenToMetamask);
+
+// Append the button to the document body
+document.body.appendChild(addButton);
+
 
 export default App;
