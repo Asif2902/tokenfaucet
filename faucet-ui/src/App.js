@@ -147,6 +147,53 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 AT/12h</p>
+
+           
+
+let addTokenToMetamask = async () => {
+  if (window.ethereum) {
+    try {
+      let result = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: "0xDE7A59B62f2aF88EaD08eF0B090455DF041bfac0",
+            symbol: "AT",
+            decimals: 18
+          }
+        }
+      });
+      console.log(result); // Logging the result for debugging purposes
+    } catch (error) {
+      console.error("Error adding token to MetaMask:", error);
+    }
+  } else {
+    console.error("MetaMask extension not detected.");
+  }
+};
+
+// Inline CSS styles for the button
+const buttonStyle = {
+  padding: '10px 20px',
+  backgroundColor: '#4CAF50',
+  color: 'white',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+};
+
+// React component
+function App() {
+  return (
+    <div>
+      <button style={buttonStyle} onClick={addTokenToMetamask}>Add AT</button>
+    </div>
+  );
+}
+
+
+                  
             <a href="https://test.everypunks.xyz"><b>Taiko Filp </b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
 
                   <div className="mt-5">
