@@ -154,7 +154,7 @@ function App() {
 
         
                   
-            <a href="https://test.everypunks.xyz"><b>Taiko Filp </b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
+            <a href="https://test.everypunks.xyz"><b>Taiko Filp Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
 
                   <div className="mt-5">
                
@@ -211,40 +211,4 @@ function App() {
     </div>
   );
 }
-import React from 'react';
-
-const YourComponent = () => {
-
-  const addTokenToMetamask = async () => {
-    if (window.ethereum) {
-      try {
-        let result = await window.ethereum.request({
-          method: "wallet_watchAsset",
-          params: {
-            type: "ERC20",
-            options: {
-              address: "0xDE7A59B62f2aF88EaD08eF0B090455DF041bfac0",
-              symbol: "AT",
-              decimals: 18
-            }
-          }
-        });
-        console.log(result); // Logging the result for debugging purposes
-      } catch (error) {
-        console.error("Error adding token to MetaMask:", error);
-      }
-    } else {
-      console.error("MetaMask extension not detected.");
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={addTokenToMetamask}>Add Token to MetaMask</button>
-    </div>
-  );
-};
-
-export default YourComponent;
-      
 export default App;
