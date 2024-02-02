@@ -246,3 +246,5 @@ const YourComponent = () => {
 };
 
 export default YourComponent;
+      
+export default App;
