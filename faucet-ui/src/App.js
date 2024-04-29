@@ -64,7 +64,7 @@ function App() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const chainId = await provider.send("eth_chainId");
-        if (chainId === "0x28c60") {
+        if (chainId === "0x28c61") {
           setIsCorrectNetwork(true);
           const accounts = await provider.send("eth_accounts", []);
           if (accounts.length > 0) {
@@ -77,7 +77,7 @@ function App() {
           setIsCorrectNetwork(false);
           await window.ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x28c60" }],
+            params: [{ chainId: "0x28c61" }],
           });
         }
       } catch (error) {
