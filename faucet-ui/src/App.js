@@ -122,7 +122,7 @@ function App() {
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
-            <h1 className="navbar-item is-size-4">Asif Token (AT)</h1>
+            <h1 className="navbar-item is-size-4">Taiko Filp Token (TKOF)</h1>
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end is-align-items-center">
@@ -147,7 +147,7 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. 500 AT/12h</p>
+            <p>Fast and reliable. 500 TKOF/12h</p>
 
            
 
