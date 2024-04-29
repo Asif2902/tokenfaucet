@@ -192,7 +192,7 @@ function App() {
                   <p>
                     {transactionData ? (
                       <a
-                        href={`https://explorer.katla.taiko.xyz/tx/${transactionData}`}
+                        href={`https://blockscoutapi.hekla.taiko.xyz/tx/${transactionData}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
