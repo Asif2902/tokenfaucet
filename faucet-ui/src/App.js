@@ -32,15 +32,15 @@ function App() {
           method: "wallet_addEthereumChain",
           params: [
             {
-              chainId: "0x28c60",
-              chainName: "Katla",
+              chainId: "0x28c61",
+              chainName: "Taiko Hekla L2",
               nativeCurrency: {
                 name: "Ethereum",
                 symbol: "ETH",
                 decimals: 18,
               },
-              rpcUrls: ["https://rpc.katla.taiko.xyz"],
-              blockExplorerUrls: ["https://explorer.katla.taiko.xyz/"],
+              rpcUrls: ["https://rpc.hekla.taiko.xyz"],
+              blockExplorerUrls: ["https://blockscoutapi.hekla.taiko.xyz/"],
             },
           ],
         });
