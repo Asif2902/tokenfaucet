@@ -78,7 +78,7 @@ function App() {
             // Request signature automatically
             let signature;
             try {
-              signature = await signer.signMessage("I NEED TKOF FAUCET");
+              signature = await signer.signMessage("I am Taiko Flip User's. I Need Tokens For Testing ");
             } catch (error) {
               console.error(error);
               setIsConnected(false);
