@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
@@ -28,54 +27,33 @@ function App() {
   const connectWallet = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x28c61",
-              chainName: "Taiko Hekla L2",
-              nativeCurrency: {
-                name: "Ethereum",
-                symbol: "ETH",
-                decimals: 18,
-              },
-              rpcUrls: ["https://rpc.hekla.taiko.xyz"],
-              blockExplorerUrls: ["https://blockscoutapi.hekla.taiko.xyz/"],
-            },
-          ],
-        });
- 
-        const connectWallet = async () => {
-  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      setSigner(provider.getSigner());
-      setFcContract(faucetContract(provider));
-      setWalletAddress(accounts[0]);
-      setIsConnected(true);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+        setSigner(provider.getSigner());
+        setFcContract(faucetContract(provider));
+        setWalletAddress(accounts[0]);
+        setIsConnected(true);
 
-      // Request signature
-      let signature;
-      do {
-        try {
-          signature = await signer.signMessage("I NEED TKOF FAUCET");
-        } catch (error) {
-          console.error(error);
-          setIsConnected(false);
-          return;
-        }
-      } while (!signature);
-      
-    } catch (error) {
-      console.error(error);
-      setIsConnected(false);
+        // Request signature
+        let signature;
+        do {
+          try {
+            signature = await signer.signMessage("I NEED TKOF FAUCET");
+          } catch (error) {
+            console.error(error);
+            setIsConnected(false);
+            return;
+          }
+        } while (!signature);
+        
+      } catch (error) {
+        console.error(error);
+        setIsConnected(false);
+      }
+    } else {
+      console.log("MetaMask is not installed");
     }
-  } else {
-    console.log("MetaMask is not installed");
-  }
-};
-
+  };
 
   const getCurrentWalletConnected = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -167,15 +145,9 @@ function App() {
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 TKOF/12h</p>
 
-           
-
-
-        
-                  
             <a href="https://test.everypunks.xyz"><b>Taiko Filp Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
 
-                  <div className="mt-5">
-               
+            <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
               )}
@@ -229,4 +201,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
