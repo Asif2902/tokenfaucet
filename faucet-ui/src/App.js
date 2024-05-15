@@ -24,36 +24,42 @@ function App() {
     localStorage.setItem("transactionData", transactionData);
   }, [transactionData]);
 
-  const connectWallet = async () => {
-    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const accounts = await provider.send("eth_requestAccounts", []);
-        setSigner(provider.getSigner());
-        setFcContract(faucetContract(provider));
-        setWalletAddress(accounts[0]);
-        setIsConnected(true);
+const connectWallet = async () => {
+  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      setSigner(provider.getSigner());
+      setFcContract(faucetContract(provider));
+      setWalletAddress(accounts[0]);
+      setIsConnected(true);
 
-        // Request signature
-        let signature;
-        do {
-          try {
-            signature = await signer.signMessage("I NEED TKOF FAUCET");
-          } catch (error) {
-            console.error(error);
-            setIsConnected(false);
-            return;
-          }
-        } while (!signature);
-        
+      // Request signature automatically
+      let signature;
+      try {
+        signature = await signer.signMessage("I NEED TKOF FAUCET");
       } catch (error) {
         console.error(error);
         setIsConnected(false);
+        return;
       }
-    } else {
-      console.log("MetaMask is not installed");
+
+      // Check if signature is received
+      if (!signature) {
+        setIsConnected(false);
+        setWithdrawError("You didn't sign the signature. Please refresh the page.");
+        return;
+      }
+      
+    } catch (error) {
+      console.error(error);
+      setIsConnected(false);
     }
-  };
+  } else {
+    console.log("MetaMask is not installed");
+  }
+};
+
 
   const getCurrentWalletConnected = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
