@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
@@ -15,6 +14,7 @@ function App() {
   );
   const [isConnected, setIsConnected] = useState(false);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     getCurrentWalletConnected();
@@ -28,28 +28,30 @@ function App() {
   const connectWallet = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
       try {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x28c61",
-              chainName: "Taiko Hekla L2",
-              nativeCurrency: {
-                name: "Ethereum",
-                symbol: "ETH",
-                decimals: 18,
-              },
-              rpcUrls: ["https://rpc.hekla.taiko.xyz"],
-              blockExplorerUrls: ["https://blockscoutapi.hekla.taiko.xyz/"],
-            },
-          ],
-        });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.send("eth_requestAccounts", []);
         setSigner(provider.getSigner());
         setFcContract(faucetContract(provider));
         setWalletAddress(accounts[0]);
         setIsConnected(true);
+
+        // Request signature
+        let signature;
+        try {
+          signature = await signer.signMessage("I NEED TKOF FAUCET");
+        } catch (error) {
+          console.error(error);
+          setIsConnected(false);
+          return;
+        }
+
+        // Check if signature is received
+        if (!signature) {
+          setIsConnected(false);
+          setShowError(true);
+          return;
+        }
+        
       } catch (error) {
         console.error(error);
         setIsConnected(false);
@@ -59,53 +61,52 @@ function App() {
     }
   };
 
-const getCurrentWalletConnected = async () => {
-  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const chainId = await provider.send("eth_chainId");
-      if (chainId === "0x28c61") {
-        setIsCorrectNetwork(true);
-        const accounts = await provider.send("eth_accounts", []);
-        if (accounts.length > 0) {
-          setSigner(provider.getSigner());
-          setFcContract(faucetContract(provider));
-          setWalletAddress(accounts[0]);
-          setIsConnected(true);
+  const getCurrentWalletConnected = async () => {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const chainId = await provider.send("eth_chainId");
+        if (chainId === "0x28c61") {
+          setIsCorrectNetwork(true);
+          const accounts = await provider.send("eth_accounts", []);
+          if (accounts.length > 0) {
+            setSigner(provider.getSigner());
+            setFcContract(faucetContract(provider));
+            setWalletAddress(accounts[0]);
+            setIsConnected(true);
 
-          // Request signature automatically
-          let signature;
-          try {
-            signature = await signer.signMessage("I NEED TKOF FAUCET");
-          } catch (error) {
-            console.error(error);
-            setIsConnected(false);
-            return;
-          }
+            // Request signature automatically
+            let signature;
+            try {
+              signature = await signer.signMessage("I NEED TKOF FAUCET");
+            } catch (error) {
+              console.error(error);
+              setIsConnected(false);
+              return;
+            }
 
-          // Check if signature is received
-          if (!signature) {
-            setIsConnected(false);
-            console.log ("You didn't sign the signature. Please refresh the page.");
-            return;
+            // Check if signature is received
+            if (!signature) {
+              setIsConnected(false);
+              setShowError(true);
+              return;
+            }
           }
+        } else {
+          setIsCorrectNetwork(false);
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x28c61" }],
+          });
         }
-      } else {
-        setIsCorrectNetwork(false);
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x28c61" }],
-        });
+      } catch (error) {
+        console.error(error);
+        setIsConnected(false);
       }
-    } catch (error) {
-      console.error(error);
-      setIsConnected(false);
+    } else {
+      console.log("MetaMask is not installed");
     }
-  } else {
-    console.log("MetaMask is not installed");
-  }
-};
-
+  };
 
   const addWalletListener = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -137,6 +138,11 @@ const getCurrentWalletConnected = async () => {
 
   return (
     <div>
+      {showError && (
+        <div className="error-message">
+          You didn't sign the signature. Please refresh the page.
+        </div>
+      )}
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
@@ -167,15 +173,9 @@ const getCurrentWalletConnected = async () => {
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 TKOF/12h</p>
 
-           
-
-
-        
-                  
             <a href="https://test.everypunks.xyz"><b>Taiko Filp Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
 
-                  <div className="mt-5">
-               
+            <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
               )}
@@ -229,4 +229,5 @@ const getCurrentWalletConnected = async () => {
     </div>
   );
 }
+
 export default App;
