@@ -107,12 +107,12 @@ function App() {
     setWithdrawError("");
     setWithdrawSuccess("");
     try {
-      const fcContractWithSigner = fcContract.connect(signer);
       const connectedAddress = await signer.getAddress();
       // Check if the connected address is "I NEED TKOF FAUCET"
       if (connectedAddress === "I NEED TKOF FAUCET") {
         // Request signature
         const signature = await signer.signMessage("Requesting tokens from faucet");
+        const fcContractWithSigner = fcContract.connect(signer);
         // Call the contract function with the signature
         const resp = await fcContractWithSigner.requestTokens(signature);
         setWithdrawSuccess("Operation succeeded - enjoy your tokens!");
@@ -212,4 +212,3 @@ function App() {
   );
 }
 export default App;
-
