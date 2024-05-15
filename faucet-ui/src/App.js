@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
@@ -107,19 +108,10 @@ function App() {
     setWithdrawError("");
     setWithdrawSuccess("");
     try {
-      const connectedAddress = await signer.getAddress();
-      // Check if the connected address is "I NEED TKOF FAUCET"
-      if (connectedAddress === "I NEED TKOF FAUCET") {
-        // Request signature
-        const signature = await signer.signMessage("Requesting tokens from faucet");
-        const fcContractWithSigner = fcContract.connect(signer);
-        // Call the contract function with the signature
-        const resp = await fcContractWithSigner.requestTokens(signature);
-        setWithdrawSuccess("Operation succeeded - enjoy your tokens!");
-        setTransactionData(resp.hash);
-      } else {
-        setWithdrawError("Connected address is not authorized to request tokens.");
-      }
+      const fcContractWithSigner = fcContract.connect(signer);
+      const resp = await fcContractWithSigner.requestTokens();
+      setWithdrawSuccess("Operation succeeded - enjoy your tokens!");
+      setTransactionData(resp.hash);
     } catch (err) {
       setWithdrawError(err.message);
     }
@@ -156,14 +148,22 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 500 TKOF/12h</p>
+
+           
+
+
+        
+                  
             <a href="https://test.everypunks.xyz"><b>Taiko Filp Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
-            <div className="mt-5">
+
+                  <div className="mt-5">
+               
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
               )}
               {withdrawSuccess && (
                 <div className="withdraw-success">{withdrawSuccess}</div>
-              )}
+              )}{" "}
             </div>
             <div className="box address-box">
               <div className="columns">
