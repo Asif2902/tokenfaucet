@@ -86,7 +86,7 @@ const getCurrentWalletConnected = async () => {
           // Check if signature is received
           if (!signature) {
             setIsConnected(false);
-            setWithdrawError("You didn't sign the signature. Please refresh the page.");
+            console.log ("You didn't sign the signature. Please refresh the page.");
             return;
           }
         }
