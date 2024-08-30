@@ -38,7 +38,7 @@ function App() {
         // Request signature
         let signature;
         try {
-          signature = await signer.signMessage("I NEED TKOF FAUCET");
+          signature = await signer.signMessage("I NEED TT FAUCET");
         } catch (error) {
           console.error(error);
           setIsConnected(false);
@@ -66,7 +66,7 @@ function App() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const chainId = await provider.send("eth_chainId");
-        if (chainId === "0x28c61") {
+        if (chainId === "0x79a") {
           setIsCorrectNetwork(true);
           const accounts = await provider.send("eth_accounts", []);
           if (accounts.length > 0) {
@@ -78,7 +78,7 @@ function App() {
             // Request signature automatically
             let signature;
             try {
-              signature = await signer.signMessage("I am Taiko Flip User's. I Need Tokens For Testing ");
+              signature = await signer.signMessage("I am a Tester. I Need Tokens For Testing ");
             } catch (error) {
               console.error(error);
               setIsConnected(false);
@@ -96,7 +96,7 @@ function App() {
           setIsCorrectNetwork(false);
           await window.ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x28c61" }],
+            params: [{ chainId: "0x79a" }],
           });
         }
       } catch (error) {
@@ -171,9 +171,9 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. 500 TKOF/12h</p>
+            <p>Fast and reliable. 500 TT/12h</p>
 
-            <a href="https://test.everypunks.xyz"><b>Taiko Filp Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://everypunks.xyz"><b>Homepage</b></a>
+            <a href="lp-token-lockers.vercel.app"><b> Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=""><b>Homepage</b></a>
 
             <div className="mt-5">
               {withdrawError && (
@@ -210,7 +210,7 @@ function App() {
                   <p>
                     {transactionData ? (
                       <a
-                        href={`https://blockscoutapi.hekla.taiko.xyz/tx/${transactionData}`}
+                        href={`https://explorer-testnet.soneium.org/tx/${transactionData}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
