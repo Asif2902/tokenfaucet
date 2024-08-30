@@ -146,7 +146,7 @@ function App() {
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
-            <h1 className="navbar-item is-size-4">Taiko Filp Token (TKOF)</h1>
+            <h1 className="navbar-item is-size-4">TEST Token (TT)</h1>
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end is-align-items-center">
