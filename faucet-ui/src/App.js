@@ -38,7 +38,7 @@ function App() {
         // Request signature
         let signature;
         try {
-          signature = await signer.signMessage("I NEED TT FAUCET");
+          signature = await signer.signMessage("I NEED 0xA-T FAUCET");
         } catch (error) {
           console.error(error);
           setIsConnected(false);
@@ -66,7 +66,7 @@ function App() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const chainId = await provider.send("eth_chainId");
-        if (chainId === "0x79a") {
+        if (chainId === "0x515") {
           setIsCorrectNetwork(true);
           const accounts = await provider.send("eth_accounts", []);
           if (accounts.length > 0) {
@@ -96,7 +96,7 @@ function App() {
           setIsCorrectNetwork(false);
           await window.ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x79a" }],
+            params: [{ chainId: "0x515" }],
           });
         }
       } catch (error) {
@@ -171,9 +171,11 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. 500 TT/12h</p>
+            <p>Fast and reliable. 50,000 0xA token /12h</p>
 
-            <a href="lp-token-lockers.vercel.app"><b> Dapp</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=""><b>Homepage</b></a>
+            <a href="https://stake.0xasif.monster"><b>
+            staking</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a
+            href="https://0xasif.monster"><b>More</b></a>
 
             <div className="mt-5">
               {withdrawError && (
@@ -210,7 +212,7 @@ function App() {
                   <p>
                     {transactionData ? (
                       <a
-                        href={`https://explorer-testnet.soneium.org/tx/${transactionData}`}
+                        href={`https://sepolia.uniscan.xyz/tx/${transactionData}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
