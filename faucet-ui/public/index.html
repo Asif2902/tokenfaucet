@@ -117,10 +117,10 @@ async function connectToMetaMask() {
       
       // Check if connected to correct network
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (chainId !== '0x515) { // 167008 in hexadecimal
+      if (chainId !== '0x279f')
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x515' }], 
+          params: [{ chainId: '0x279f' }], 
         });
         console.log('Switched to unichain network!');
       } else {
