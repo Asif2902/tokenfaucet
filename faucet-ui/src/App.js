@@ -175,7 +175,7 @@ function App() {
 
             <a href="https://stake.0xasif.monster"><b>
             staking</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a
-            href="https://0xasif.monster"><b>More</b></a>
+            href="https://ttt.0xasif.monster"><b>Game</b></a>
 
             <div className="mt-5">
               {withdrawError && (
