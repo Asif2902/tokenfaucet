@@ -38,7 +38,7 @@ function App() {
         // Request signature
         let signature;
         try {
-          signature = await signer.signMessage("I NEED 0xA-T FAUCET");
+          signature = await signer.signMessage("I NEED StakeR  Token FAUCET");
         } catch (error) {
           console.error(error);
           setIsConnected(false);
@@ -66,7 +66,7 @@ function App() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const chainId = await provider.send("eth_chainId");
-        if (chainId === "0x515") {
+        if (chainId === "0x279f") {
           setIsCorrectNetwork(true);
           const accounts = await provider.send("eth_accounts", []);
           if (accounts.length > 0) {
@@ -78,7 +78,7 @@ function App() {
             // Request signature automatically
             let signature;
             try {
-              signature = await signer.signMessage("I am a Tester. I Need Tokens For Testing ");
+              signature = await signer.signMessage("I am a Hoomaan. I Need Tokens For Testing ");
             } catch (error) {
               console.error(error);
               setIsConnected(false);
@@ -96,7 +96,7 @@ function App() {
           setIsCorrectNetwork(false);
           await window.ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x515" }],
+            params: [{ chainId: "0x279f" }],
           });
         }
       } catch (error) {
@@ -146,7 +146,7 @@ function App() {
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
-            <h1 className="navbar-item is-size-4">TEST Token (TT)</h1>
+            <h1 className="navbar-item is-size-4">StakeR  Token (TT)</h1>
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end is-align-items-center">
@@ -171,7 +171,7 @@ function App() {
         <div className="faucet-hero-body">
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
-            <p>Fast and reliable. 50,000 0xA token /12h</p>
+            <p>Fast and reliable. 500 StakeR  token /12h</p>
 
             <a href="https://stake.0xasif.monster"><b>
             staking</b></a>&nbsp;&nbsp;&nbsp;&nbsp;<a
@@ -212,7 +212,7 @@ function App() {
                   <p>
                     {transactionData ? (
                       <a
-                        href={`https://sepolia.uniscan.xyz/tx/${transactionData}`}
+                        href={`https://testnet.monadexplorer.com/tx/${transactionData}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
